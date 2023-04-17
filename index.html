@@ -1,0 +1,432 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="description" content="fa/mru cache simulator">
+  <meta name="keywords" content="cache">
+  <meta name="author" content="CSARCH2-G4">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Full Associative / Most Recently Used Cache Simulator</title>
+
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+  <!--   Core JS Files   -->
+  <script src="https://kit.fontawesome.com/a2bb66671d.js" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.js" integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a2bb66671d.js" crossorigin="anonymous"></script>
+
+  <!-- Script for simulation -->
+  <script src="simulation.js"></script>
+</head>
+
+<style>
+  body {
+
+    background-color: #1a1919;
+    opacity: 0;
+    transition: opacity 1s;
+    -webkit-transition: opacity 1;
+    max-width: 70%;
+    margin: 0 auto;
+  }
+
+  #cacheSim {
+    width: 90% !important;
+    margin-left: 20%;
+  }
+
+  .inputrow {
+    background-color: rgb(51, 52, 56);
+    color: white;
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .colortext{
+    color:#eb88d0;
+  }
+
+  .colorsubtext{
+    color:green;
+  }
+
+  label {
+    color: #eb88d0;
+  }
+
+  .form-group, .form-control, .input-card, .simulation-card, .output-card {
+    background-color: #3b3b3b;
+  }
+
+  input[type="number"]:focus {
+    outline: none !important;
+    box-shadow: none !important;
+    background-color: transparent !important;
+    color: white!important;
+  }
+
+  input[type="text"]:focus {
+    outline: none !important;     
+    box-shadow: none !important;
+    background-color: transparent !important;
+    color: white!important;
+  }
+
+  input[type="text"]::placeholder {
+  color: white;
+  }
+
+  input[type="number"]::placeholder {
+  color: white;
+  }
+
+  .table1{
+    max-width:50%;
+    margin: 0 auto;
+  }
+
+  .contextsubtextcolor {
+    color: red;
+  }
+
+  th.pink-text {
+  color: #eb88d0;
+  }
+
+
+
+</style>
+
+<body onload="document.body.style.opacity='1'">
+  <div class="container px-4 pb-2">
+    <div class="row pt-4 pb-3">
+      <div class="col">
+        <h1 class="colortext">FA/MRU Cache Simulator</h1>
+        <p class="colorsubtext">ALABANZA, ALVAREZ, ENRIQUEZ, JACINTO</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card border-info mb-3 shadow-sm input-card" style="max-width: 100%; ">
+          <div class="card-body colortext">
+            <form class="needs-validation" novalidate>
+
+
+
+
+              <div class="form-group">
+                <label for="input_blocksize">Block Size </label>
+                <input type="number" min="1" class="form-control text-white" id="input_blocksize" placeholder="Enter block size"
+                  required>
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Please enter a valid block size.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input_mmsize">Main Memory Size</label>
+                <input type="number" min="1" class="form-control text-white" id="input_mmsize" placeholder="Enter main memory size"
+                  required>
+                
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Please enter a valid main memory size.
+                </div>
+              </div>
+
+              <div class="form-group" id="viewformSize">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" value="block" name="radioUnit" id="inputradio1" checked>
+                  <label class="form-check-label text-white" for="inputradio1">
+                    Block
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" value="word" name="radioUnit" id="inputradio2">
+                  <label class="form-check-label text-white" for="inputradio2">
+                    Word
+                  </label>
+                </div>
+              </div>
+
+
+
+              <div class="form-group">
+                <label for="input_cmsize">Cache Memory Size</label>
+                <input type="number" min="1" class="form-control text-white" id="input_cmsize"
+                  placeholder="Enter cache memory size" required>
+                
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Please enter a valid cache memory size.
+                </div>
+              </div>
+
+              <div class="form-group" id="viewformSize2">
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" value="block" name="radioUnit2" id="inputradio3" checked>
+                  <label class="form-check-label text-white" for="inputradio3">
+                    Block
+                  </label>
+                </div>
+                <div class="form-check form-check-inline">
+                  <input class="form-check-input" type="radio" value="word" name="radioUnit2" id="inputradio4">
+                  <label class="form-check-label text-white" for="inputradio4">
+                    Word
+                  </label>
+                </div>
+              </div>
+              
+              <div class="form-group">
+                <label for="input_memaccesstime">Memory Access Time (ns)</label>
+                <input type="number" min="0" class="form-control text-white" id="input_memaccesstime"
+                  placeholder="Enter the time taken to access main memory" required>
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Please enter a valid memory access time value.
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="input_cacheaccesstime">Cache Access Time (ns)</label>
+                <input type="number" min="0" class="form-control text-white" id="input_cacheaccesstime"
+                  placeholder="Enter the time taken to access cache memory" required>
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Please enter a valid memory access time value.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input_sequence">Main Memory Values</label>
+                <small > (*Separate values with comma. (ie. x,x,x))</small>
+                <input type="text" class="form-control text-white" id="input_sequence"
+                  placeholder="Enter a string of integers to add to memory" required>
+   
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Invalid input.
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="input_mainMemoryMult">Number of times to add the
+                  sequence.</label>
+                <input type="number" value="1" class="form-control text-white" id="input_mainMemoryMult"
+                  placeholder="Enter the number of times to add the sequence" required>
+                <div class="valid-feedback">
+                  Valid input.
+                </div>
+                <div class="invalid-feedback">
+                  Invalid input. Input a positive integer.
+                </div>
+              </div>
+              <div class="form-group text-center">
+                <button type="button" class="btn btn-success" id="addValues">Add Values</button>
+              </div>
+              <div class="form-group">
+                <table class="table table-sm table-striped text-white table1">
+                  <thead>
+                    <tr>
+                      <th scope="col" class="text-white">Index</th>
+                      <th scope="col" class="text-white">Value</th>
+                    </tr>
+
+                  <tbody id="sequenceBody">
+
+                  </tbody>
+                  </thead>
+                </table>
+              </div>
+              <div class="form-group text-center pt-3">
+                <button type="submit" class="btn btn-info" id="submitInputs">SUBMIT</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card border-warning mb-3 shadow-sm simulation-card" style="max-width: 100%;">
+          <div class="card-body text-warning simulation-body" id="simulation-body" hidden>
+            <div class="row" bg="light-blue">
+              <div class="col-1"></div>
+              <div class="col-10">
+                <h1 class="colortext">Input</h1>
+                <div class="row inputrow" id="inputSimulation">
+
+                </div>
+              </div>
+            </div>
+            <div class="row">
+
+              <div class="col-1"></div>
+              <div class="col-10">
+                <h1 class="colortext" >Cache Memory</h1>
+                <div class="row">
+                  <div class="col-6">
+                    <table class="table" id="cacheSim">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col">Block Number</th>
+                          <th scope="col" class="text-right">Data</th>
+                        </tr>
+                      </thead>
+                      <tbody class="text-white" id="simulationTable">
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="col-4">
+                    <table class="table" id="cacheSim">
+                      <thead class="thead-light">
+                        <tr>
+                          <th scope="col" class=" text-center">Hit</th>
+                          <th scope="col" class=" text-center">Miss</th>
+                        </tr>
+                      </thead>
+                      <tbody id="simulationTable">
+                        <th scope="row" id="hits" class="text-white text-center">0</th>
+                        <th scope="row" id="misses" class="text-white text-center">0</th>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-1"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div class="card border-success mb-3 shadow-sm output-card" style="max-width: 100%;">
+          <div class="card-body text-success output-body" id="output-body">
+          </div>
+
+          <!-- <div class="form-group text-center p-3">
+            <button type="button" class="btn btn-success" onclick="download()">SAVE AS .TXT FILE</button>
+          </div> -->
+          <div class="output-button"></div>
+        </div>
+      </div>
+    </div>
+    <div class="row text-center p-4 poutput-button">
+      <div class="col">
+        <button type="button" class="btn btn-warning" id="gooutput"><i class="fas fa-arrow-right"></i> SHOW RESULTS</button>
+      </div>
+    </div>
+
+    <div class="row text-center p-4 retry-button">
+      <div class="col">
+        <button type="button" class="btn btn-success" onclick="retry()"><i class="fas fa-undo-alt"></i> INPUT AGAIN?</button>
+      </div>
+    </div>
+</body>
+
+<script>
+  $(document).ready(function () {
+    $("body").fadeIn();
+    $(".output-card").hide();
+    $(".simulation-card").hide();
+    $(".retry-button").hide();
+    $(".poutput-button").hide();
+  });
+
+  // Form validator
+  (function () {
+    'use strict';
+    window.addEventListener('load', function () {
+      // Fetch all the forms we want to apply custom Bootstrap validation styles to
+      var forms = document.getElementsByClassName('needs-validation');
+      // Loop over them and prevent submission
+      var validation = Array.prototype.filter.call(forms, function (form) {
+        form.addEventListener('submit', function (event) {
+          if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+          } else {
+            event.preventDefault();
+            // submit();
+          }
+          // form.classList.add('was-validated');
+        }, false);
+      });
+    }, false);
+  })();
+
+  // Input submit
+  function submit() {
+    // Values from input
+    var blocksize = $("#input_blocksize").val();
+    var mmsize = $("#input_mmsize").val();
+    var cachesize = $("#input_cmsize").val();
+
+    // Hide input card
+    $(".input-card").hide();
+    $(".output-card").hide();
+    $(".simulation-card").show();
+    $(".retry-button").show();
+    $(".poutput-button").show();
+
+    // For clearing and appending div contents
+    $(".output-body").empty();
+    $(".output-button").empty();
+    $(".output-button").append('<div class="form-group text-center p-3"> <button type="button" class="btn btn-success" onclick="download()">SAVE AS .TXT FILE</button> </div>');
+  }
+
+  // Retry button
+  function retry() {
+    location.reload()
+    // $(".simulation-body").empty();
+    // $(".output-body").empty();
+    // $(".output-button").empty();
+
+    // $(".input-card").show();
+    // $(".retry-button").hide();
+    // $(".output-card").hide();
+    // $(".simulation-card").hide();
+  }
+
+  // Download text file
+  function download() {
+    var a = document.body.appendChild(
+      document.createElement("a")
+    );
+    var textToWrite = document.getElementById("output-body").innerText;
+    a.download = "fa/mrucache.txt";
+    textToWrite = textToWrite.replace(/\n/g, "%0D%0A");
+    a.href = "data:text/plain," + textToWrite;
+    a.click();
+  }
+</script>
+
+</html>
